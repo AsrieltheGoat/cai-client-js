@@ -3,7 +3,7 @@ const { Client } = require("discord.js-selfbot-v13");
 const CharacterAI = require("node_characterai");
 const characterAI = new CharacterAI();
 const client = new Client({
-    checkUpdate: false,
+    checkUpdate: false, // Disable update check
 });
 
 // Use c.ai plus
@@ -14,16 +14,30 @@ const keyword = "ganyu"; // Ganyu
 const charId = "I3OCwWQKKEj12lt3mpLvHRyrBdXgotqVUHg0MzAGmSk"; // Ganyu
 
 client.on("messageCreate", async (message) => {
-    // Pass the message from message.content to the c.ai API
-    const messageContent = message.content;
+    // Listen for message that contains the keyword or ping
+    if (
+        message.content.toLowerCase().includes(keyword) ||
+        message.mentions.has(client.user)
+    ) {
+        let messageContent = message.content;
 
-    // Listen for message that contains the magic word "ganyu"
-    if (message.content.toLowerCase().includes(keyword)) {
-        // console.log(messageContent);
+        // if message reply is from the bot itself, return
+        if (message.author.id === client.user.id) return;
+
+        // check if the message contains the ping (eg: <@742595350413443102>), remove it and parse the message only
+        if (messageContent.includes("<@")) {
+            messageContent = messageContent.replace(/<@.*>/, "");
+        }
+
+        // If the message is empty, set it to "Hi!"
+        if (!messageContent) {
+            messageContent = "Hi!";
+        }
+
+        console.log(messageContent);
+        message.channel.sendTyping();
 
         (async () => {
-            // TODO: Add if user reply to message.reply, continue the conversation
-
             // c.ai part
             const chat = await characterAI.createOrContinueChat(charId);
             const response = await chat.sendAndAwaitResponse(
