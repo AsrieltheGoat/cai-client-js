@@ -34,7 +34,7 @@ client.on("messageCreate", async (message) => {
             messageContent = "Hi!";
         }
 
-        console.log(messageContent);
+        // console.log(messageContent);
         message.channel.sendTyping();
 
         (async () => {
