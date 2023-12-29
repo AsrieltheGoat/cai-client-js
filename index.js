@@ -21,6 +21,9 @@ client.on("messageCreate", async (message) => {
     ) {
         let messageContent = message.content;
 
+        // if the author is a bot, return
+        if (message.author.bot) return;
+
         // if message reply is from the bot itself, return
         if (message.author.id === client.user.id) return;
 
