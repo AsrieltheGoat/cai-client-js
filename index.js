@@ -3,7 +3,7 @@ const { Client } = require("discord.js-selfbot-v13");
 const CharacterAI = require("node_characterai");
 const characterAI = new CharacterAI();
 const client = new Client({
-    checkUpdate: false, // Disable update check
+    checkUpdate: true, // Disable update check
 });
 
 // Use c.ai plus
@@ -54,7 +54,7 @@ client.on("messageCreate", async (message) => {
 
 // Authenticate with the c.ai API
 async function authenticate() {
-    await characterAI.authenticateWithToken(process.env.caiToken);
+    await characterAI.authenticateWithToken(process.env.caiToken, process.env.idToken);
 }
 
 authenticate()
