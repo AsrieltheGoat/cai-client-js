@@ -54,6 +54,8 @@ client.on("messageCreate", async (message) => {
 
 // Authenticate with the c.ai API
 async function authenticate() {
+    // TODO: Fix the puppeteer issue with chrome path on windows
+    // TODO: Error: Could not find Chromium (rev. 1108766). This can occur if either
     await characterAI.authenticateWithToken(process.env.caiToken, process.env.idToken);
 }
 
