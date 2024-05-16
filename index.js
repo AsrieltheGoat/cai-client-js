@@ -49,22 +49,33 @@ client.on("messageCreate", async (message) => {
 async function authenticate() {
     // TODO: Fix the puppeteer issue with chrome path on windows
     // TODO: Error: Could not find Chromium (rev. 1108766). This can occur if either
-    await characterAI.authenticateWithToken(
-        process.env.caiToken,
-        process.env.idToken
-    );
+
+    await characterAI.authenticateWithToken(process.env.caiToken);
+}
+
+async function authenticateAsGuest() {
+    await characterAI.authenticateAsGuest();
 }
 
 authenticate()
     .then(() => {
         // Authentication completed
-        console.log("c.ai authentication completed");
+        console.log("[node_characterai] c.ai authentication completed");
 
         // Authenticate with Discord
         client.login(process.env.Token);
     })
     .catch((error) => {
-        console.error("c.ai authentication failed:\n", error);
+        console.error("[node_characterai] c.ai authentication failed:\n", error);
+        console.error("[node_characterai] Retrying with guest");
+        authenticateAsGuest()
+            .then(() => {
+                console.log("[node_characterai] c.ai authentication completed as guest");
+                client.login(process.env.Token);
+            })
+            .catch((error) => {
+                console.error("[node_characterai] c.ai authentication failed as guest:\n", error);
+            });
     });
 
 client.on("ready", () => {
