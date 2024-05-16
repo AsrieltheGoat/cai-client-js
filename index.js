@@ -21,24 +21,17 @@ client.on("messageCreate", async (message) => {
     ) {
         let messageContent = message.content;
 
-        // if the author is a bot, return
-        if (message.author.bot) return;
-
-        // if message reply is from the bot itself, return
-        if (message.author.id === client.user.id) return;
-
-        // check if the message contains the ping (eg: <@742595350413443102>), remove it and parse the message only
+        if (message.author.bot) return; // if the author is a bot, return
+        if (message.author.id === client.user.id) return; // if message reply is from the bot itself, return
         if (messageContent.includes("<@")) {
             messageContent = messageContent.replace(/<@.*>/, "");
-        }
-
-        // If the message is empty, set it to "Hi!"
+        } // check if the message contains the ping (eg: <@742595350413443102>), remove it and parse the message only
         if (!messageContent) {
             messageContent = "Hi!";
-        }
+        } // If the message is empty, set it to "Hi!"
 
         // console.log(messageContent);
-        message.channel.sendTyping();
+        message.channel.sendTyping(); // Send typing to the channel
 
         (async () => {
             // c.ai part
@@ -56,7 +49,10 @@ client.on("messageCreate", async (message) => {
 async function authenticate() {
     // TODO: Fix the puppeteer issue with chrome path on windows
     // TODO: Error: Could not find Chromium (rev. 1108766). This can occur if either
-    await characterAI.authenticateWithToken(process.env.caiToken, process.env.idToken);
+    await characterAI.authenticateWithToken(
+        process.env.caiToken,
+        process.env.idToken
+    );
 }
 
 authenticate()
